@@ -10,4 +10,5 @@ int main()
 
     video1.print();
     video2.print();
+    return 0;
 }
