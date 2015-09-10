@@ -15,12 +15,3 @@ void Video::print()
 {
   cout <<  mt << ", " << mu << ", " << mc << ", " << ml << ", " << string(mr, '*') << endl;
 }
-
-/*int Video::StarRating(int r)
-{
-  for(int i = 0; i < r; i++)
-  {
-    cout << "*";
-  }
-  return NULL;
-}*/
