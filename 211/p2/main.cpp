@@ -6,7 +6,7 @@ using namespace std;
 int main()
 {
   string sortMethod;            //holds the way to sort the video entries
-  int maxVids = 100;            //max number allowed to be entered by user
+  const int maxVids = 100;            //max number allowed to be entered by user
   int numVidsEntered = 0;       //used to confirm number of entries
 
   string title;
@@ -18,7 +18,7 @@ int main()
   Video *videos[maxVids];
 
   cin >> sortMethod;
-  if(sortMethod != "rating" && sortMethod != "length" && sortMethod != "title"){
+  if(sortMethod != "rating" && sortMethod != "length" && sortMethod != "title"){  // error check for sorting method
     cerr << sortMethod << " is not a legal sorting method, giving up." << endl;
     return 1;
   }
@@ -34,10 +34,17 @@ int main()
 
     numVidsEntered++;
   }
-  if(numVidsEntered > maxVids){
+  if(numVidsEntered > maxVids){                   // error check for video cap
     cerr << "Too many videos, giving up." << endl;
     return 1;
   }
+
+
+  for (int last = numVidsEntered -1; last > 0; last--)
+    for (int cur = 0; cur < last; cur++)
+    
+      if (videos[cur]->lengthCompare(videos[cur+1]))
+        swap(videos[cur], videos[cur+1]);
 
   for(int i = 0; i<numVidsEntered-1; i++){
     videos[i] -> print();

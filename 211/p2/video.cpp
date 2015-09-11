@@ -15,3 +15,8 @@ void Video::print()
 {
   cout <<  mt << ", " << mu << ", " << mc << ", " << ml << ", " << string(mr, '*') << endl;
 }
+
+bool Video::longer(Video *other)
+{
+  return ml > other->ml;
+}
