@@ -15,3 +15,18 @@ void Video::print()
 {
   cout <<  mt << ", " << mu << ", " << mc << ", " << ml << ", " << string(mr, '*') << endl;
 }
+
+bool Video::titleComp(Video *other)
+{
+  return mt > other->mt;
+}
+
+bool Video::lengthComp(Video *other)
+{
+  return ml > other->ml;
+}
+
+bool Video::rateComp(Video *other)
+{
+  return mr > other->mr;
+}
