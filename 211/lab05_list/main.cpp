@@ -4,20 +4,16 @@ using namespace std;
 
 int main()
 {
-    // instantiate a List class (the constructor takes NO arguments)
-    List list;
+  // instantiate a List class (the constructor takes NO arguments)
+  List list;
 
-    // NOTE:
-    // List list();  is incorrect, when there are no arguments don't use ()
+  int num = 0;;
 
-    // insert numbers into the list
-    list.print();
-    list.insert(1);
-    list.print();
-    list.insert(2);
-    list.print();
-    list.insert(3);
-    list.print();
+  while(cin >> num){
+    list.insertAtEnd(num);
+  }
 
-    return 0;
+  list.print();
+  cout << "sum = " << list.sum() << endl;
+  return 0;
 }
