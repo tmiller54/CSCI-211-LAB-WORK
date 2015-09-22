@@ -14,22 +14,22 @@ Video::Video(string title, string url, string comment, double length, int rating
   mr = rating;
 }
 
-void Video::print()
+void Video::Print()
 {
   cout <<  mt << ", " << mu << ", " << mc << ", " << ml << ", " << string(mr, '*') << endl;
 }
 
-bool Video::titleComp(Video *other)
+bool Video::TitleComp(Video *other)
 {
-  return mt > other->mt;
+  return mt < other->mt;
 }
 
-bool Video::lengthComp(Video *other)
+bool Video::LengthComp(Video *other)
 {
   return ml > other->ml;
 }
 
-bool Video::rateComp(Video *other)
+bool Video::RateComp(Video *other)
 {
   return mr < other->mr;
 }

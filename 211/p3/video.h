@@ -8,11 +8,11 @@ class Video
 {
   public:
     Video(std::string title, std::string url, std::string comment, double length, int rating);
-    void print();
+    void Print();
 
-    bool titleComp(Video *comparant);
-    bool lengthComp(Video *comparant);
-    bool rateComp(Video *comparant);
+    bool TitleComp(Video *comparant);
+    bool LengthComp(Video *comparant);
+    bool RateComp(Video *comparant);
 
   private:
     std::string mt, mu, mc;

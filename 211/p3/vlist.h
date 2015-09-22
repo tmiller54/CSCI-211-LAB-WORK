@@ -9,20 +9,20 @@ class Vlist{
   public:
     Vlist();
     ~Vlist();
-    void Insert(Video *vidPointer);
+    void Insert(Video *vid);
     void Print();
     void VideoLookUp(std::string title);
     void NumberOfVideos();
-    void Remove(std:string title);
+    void Remove(std::string title);
   private:
-    class Video{
+    class Node{
       public:
-        Video(Video *vidPointer, Video *next){
-          mvidPointer = vidPointer;
+        Node(Video *vid, Node *next){
+          mvid = vid;
           mnext = next;
         }
-        Video *mvidPointer;
-        Video *mnext;
+        Video *mvid;
+        Node *mnext;
     };
     Node *mhead;
 };
