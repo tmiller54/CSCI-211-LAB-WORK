@@ -19,6 +19,10 @@ void Video::Print()
   cout <<  mt << ", " << mu << ", " << mc << ", " << ml << ", " << string(mr, '*') << endl;
 }
 
+string Video::GetTitle(){
+  return mt;
+}
+
 bool Video::TitleComp(Video *other)
 {
   return mt < other->mt;

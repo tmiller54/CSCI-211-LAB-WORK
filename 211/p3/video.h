@@ -13,6 +13,7 @@ class Video
     bool TitleComp(Video *comparant);
     bool LengthComp(Video *comparant);
     bool RateComp(Video *comparant);
+    std::string GetTitle();
 
   private:
     std::string mt, mu, mc;

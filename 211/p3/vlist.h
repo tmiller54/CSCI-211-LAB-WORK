@@ -9,11 +9,11 @@ class Vlist{
   public:
     Vlist();
     ~Vlist();
-    void Insert(Video *vid);
+    bool Insert(Video *vid);
     void Print();
-    void VideoLookUp(std::string title);
-    void NumberOfVideos();
-    void Remove(std::string title);
+    int NumberOfVideos();
+    bool VideoLookUp(std::string title);
+    bool Remove(std::string title);
   private:
     class Node{
       public:

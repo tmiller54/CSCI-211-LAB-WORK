@@ -16,6 +16,7 @@ int main(){
   string comment;
   double length;
   int rating;
+  bool error;
 
   while(getline(cin, input)){
 
@@ -28,7 +29,10 @@ int main(){
       cin.ignore();
 
       video = new Video(title, url, comment, length, rating);
-      vlist.Insert(video);
+      error = vlist.Insert(video);
+      if(!error){
+        cerr << "Could not insert video <" << title << ">, already in list." << endl;
+      }
     }
 
     else if(input =="print"){
@@ -36,15 +40,23 @@ int main(){
     }
 
     else if(input == "length"){
-
+      cout << vlist.NumberOfVideos() << endl;
     }
 
     else if(input == "lookup"){
-
+      getline(cin,title);
+      error = vlist.VideoLookUp(title);
+      if(!error){
+        cerr << "Title <" << title << "> not in list." << endl;
+      }
     }
 
     else if (input == "remove"){
-
+      getline(cin,title);
+      error = vlist.Remove(title);
+      if(!error){
+        cerr << "Title <" << title << "> not in list, could not delete." << endl;
+      }
     }
 
     else{

@@ -19,15 +19,30 @@ Vlist::~Vlist(){
   }
 }
 
-void Vlist::Insert(Video *vid){
-  if(!mhead)
-    mhead = new Node(vid, mhead);
-
-  Node *cur = mhead;
-  while(cur -> mnext && cur -> mvid->TitleComp(vid)){
-    cur = cur -> mnext;
+bool Vlist::Insert(Video *vid){
+  Node *errTemp = mhead;        //check for duplicate title.
+  while(errTemp){
+    if(vid -> GetTitle() == errTemp -> mvid -> GetTitle()){
+      return false;
+    }
+    errTemp = errTemp -> mnext;
   }
-  cur -> mnext = new Node(vid, cur -> mnext);
+
+  if(!mhead){                     //if no list, create node.
+    mhead = new Node(vid, mhead);
+  }
+
+  else if (vid -> GetTitle() < mhead -> mvid -> GetTitle()){   //insert before head.
+    mhead = new Node(vid, mhead);
+  }
+  else{                           //insert everywhere else.
+    Node *cur = mhead;
+    while(cur -> mnext && vid -> GetTitle() > cur -> mnext -> mvid -> GetTitle()){
+      cur = cur -> mnext;
+    }
+    cur -> mnext = new Node(vid, cur -> mnext);
+  }
+  return true;
 }
 
 void Vlist::Print(){
@@ -38,14 +53,53 @@ void Vlist::Print(){
   }
 }
 
-void Vlist::VideoLookUp(string title){
-
+int Vlist::NumberOfVideos(){
+  if(!mhead){
+    return 0;
+  }
+  Node *cur = mhead;
+  int numVids;
+  while(cur){
+    numVids++;
+    cur = cur -> mnext;
+  }
+  return numVids;
 }
 
-void Vlist::NumberOfVideos(){
-
+bool Vlist::VideoLookUp(string title){
+  Node *cur = mhead;
+  while(cur){
+    if(cur -> mvid -> GetTitle() == title){
+      cur -> mvid -> Print();
+      return true;
+    }
+    cur = cur -> mnext;
+  }
+  return false;
 }
 
-void Vlist::Remove(string title){
+bool Vlist::Remove(string title){
+  if(!mhead){
+    return false;
+  }
 
+  if(mhead -> mvid -> GetTitle() == title){
+    Node *temp = mhead;
+    mhead = mhead -> mnext;
+    delete temp;
+    return true;
+  }
+
+  Node *cur = mhead;
+  while(cur -> mnext && cur -> mnext -> mvid -> GetTitle() != title){
+    cur = cur -> mnext;
+  }
+  if(!cur -> mnext){
+    return false;
+  }
+
+  Node *temp = cur -> mnext;
+  cur -> mnext = cur -> mnext -> mnext;
+  delete temp;
+  return true;
 }
