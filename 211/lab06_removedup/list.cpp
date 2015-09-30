@@ -1,5 +1,5 @@
 // Fill in the functions at the bottom of this file
-// 
+//
 #include <iostream>
 using namespace std;
 #include "list.h"
@@ -50,11 +50,27 @@ void List::print()
 {
     for (Node *ptr = m_head; ptr; ptr = ptr->m_next)
     {
-        cout << ptr->m_value << endl; 
+        cout << ptr->m_value << endl;
     }
 }
 
 void List::remove_duplicates()
 {
-    // put your code here
+  if(!m_head)
+    return;
+
+  Node *cur = m_head;
+  int curNum = m_head -> m_value;
+
+  while(cur -> m_next){
+    if(cur -> m_next -> m_value == curNum){
+      Node *temp = cur -> m_next;
+      cur -> m_next = cur -> m_next -> m_next;
+      delete temp;
+    }
+    else{
+      cur = cur -> m_next;
+      curNum = cur -> m_value;
+    }
+  }
 }

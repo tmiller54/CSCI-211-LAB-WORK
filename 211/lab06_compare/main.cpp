@@ -9,7 +9,7 @@ int main()
 {
     List list;
     int value;
-    int target;
+    int target = 0;
 
     // first number read is the target
     cin >> target;
