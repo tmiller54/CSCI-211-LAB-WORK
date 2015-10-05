@@ -25,7 +25,6 @@ using namespace std;
       value = 0;
       return false;
     }
-
     value = mhead -> mvalue;
 
     Node *temp = mhead;
@@ -33,7 +32,6 @@ using namespace std;
     delete temp;
 
     msize--;
-
     return true;
   }
 
