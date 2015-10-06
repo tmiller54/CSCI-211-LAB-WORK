@@ -6,6 +6,8 @@ using namespace std;
 
 int main(){
     DStack stack;
+    bool numberJustRead = false;                                //check to make sure inputs such as 1.2.3.4 don't occur w/o spaces
+    double result;
 
     char c = 1;
     while(c){
@@ -17,12 +19,62 @@ int main(){
 
         if(c == ' ' || c == '\n' || c == '\t'){         //ignores any and all whitespace
             cin.ignore();
+            numberJustRead = false;
         }
 
-        else if(isdigit(c)){                            //number entered and popped onto stack
+        else if(isdigit(c) || c == '.'){               //number entered and popped onto stack
+            if(c == '.' && numberJustRead){
+              cerr << "Error: Invalid expression." << endl;
+              return 1;
+            }
             double num;
             cin >> num;
             stack.Push(num);
+            numberJustRead = true;
+        }
+
+        else if (c == '-'){
+            char temp = cin.get();
+            char negativeCheck = cin.peek();
+
+            if(isdigit(negativeCheck)){                //if char after '-' is a number,
+                cin.putback(temp);                     //then read in negative number
+
+                if(numberJustRead){                    //stops inputs like 1.2-3 w/o spaces to differ subracting from negatives
+                  cerr << "Error: Invalid expression." << endl;
+                  return 1;
+                }
+                double num;
+                cin >> num;
+                stack.Push(num);
+                numberJustRead = true;
+            }
+
+            else if(!isdigit(negativeCheck) && negativeCheck){  //if character after '-' is not number and exists,
+                cin.putback(temp);                                //subtract first two on stack
+                bool popResult;
+                double operand1;
+                double operand2;
+
+                popResult = stack.Pop(operand1);
+                if(!popResult){
+                    cerr << "Error: Invalid expression." << endl;
+                    return 1;
+                }
+
+                popResult = stack.Pop(operand2);
+                    if(!popResult){
+                    cerr << "Error: Invalid expression." << endl;
+                    return 1;
+                    }
+
+                char operation = cin.get();
+                if(operation == '-'){                 //if subtracting
+                    result = operand2 - operand1;
+                    stack.Push(result);
+                }
+                numberJustRead = false;
+            }
         }
 
         else{                                           //everything not a number or blank space goes here
@@ -30,7 +82,6 @@ int main(){
             string stringInput;                         //for sqrt, sin, cos, and avg
             double operand1;
             double operand2;
-
 
             cin >> simpleInput;
             char nextInput = cin.peek();                //this allows inputs such as ++ or -- without spaces to work properly.
@@ -54,8 +105,7 @@ int main(){
                     cerr << "No operands" << endl;
                     return 1;
                 }
-                double result = sqrt(operand1);
-                cout << result << endl;
+                result = sqrt(operand1);
                 stack.Push(result);
             }
 
@@ -65,8 +115,7 @@ int main(){
                     cerr << "No operands" << endl;
                     return 1;
                 }
-                double result = cos(operand1*(M_PI/180));
-                cout << result << endl;
+                result = cos(operand1*(M_PI/180));
                 stack.Push(result);
             }
 
@@ -76,34 +125,32 @@ int main(){
                         cerr << "No operands" << endl;
                         return 1;
                     }
-                double result = sin(operand1*(M_PI/180));
-                cout << result << endl;
+                result = sin(operand1*(M_PI/180));
                 stack.Push(result);
             }
 
-            else if(stringInput == "vg"){               //if avg, pop all values off stack
+            else if(stringInput == "ve"){               //if avg, pop all values off stack
+                int numOfValues = stack.Size();
                 bool popResult = stack.Pop(operand1);
                     if(!popResult){
                         cerr << "No operands" << endl;
                         return 1;
                     }
 
-                    int numOfValues = stack.Size() + 1;
                 while(!stack.Empty()){
                     double tempOperand = 0;
                     stack.Pop(tempOperand);
                     operand1 += tempOperand;
                 }
 
-                double result = operand1/numOfValues;
-                cout << result << endl;
+                result = operand1/numOfValues;
                 stack.Push(result);
             }
 
             else{
                 bool popResult = stack.Pop(operand1);
                 if(!popResult){
-                    cerr << "No operands" << endl;
+                    cerr << "Error: Invalid expression." << endl;
                     return 1;
                 }
                                                     //checking for not having enough operands
@@ -113,36 +160,57 @@ int main(){
                     return 1;
                 }
 
-                cout << "op1: " << operand1 << endl;
-                cout << "op2: " << operand2 << endl;
-
                 if(simpleInput == '+'){               //if adding
-                    double result = operand2 + operand1;
-                    cout << result << endl;
+                    result = operand2 + operand1;
                     stack.Push(result);
                 }
-                if(simpleInput == '-'){               //if subtracting
-                    double result = operand2 - operand1;
-                    cout << result << endl;
-                    stack.Push(result);
-                }
+
+                //!!!!!subtracting done in negative check
+
                 if(simpleInput == '*'){               //if multiplying
-                    double result = operand2*operand1;
-                    cout << result << endl;
+                    result = operand2*operand1;
                     stack.Push(result);
                 }
                 if(simpleInput == '/'){               //if dividing
-                    double result = operand2/operand1;
-                    cout << result << endl;
+                    if(!operand1){                    //dividing by 0
+                        cerr << "Error: Invalid expression." << endl;
+                        return 1;
+                    }
+                    result = operand2/operand1;
                     stack.Push(result);
                 }
                 if(simpleInput == '^'){               //if multiplying
-                    double result = pow(operand2,operand1);
-                    cout << result << endl;
-                    stack.Push(result);
+                    if(!operand1){                    //n^0
+                        result = 1;
+                        stack.Push(result);
+                    }
+                    else if(!operand2 && operand1 < 0){    //0^(-n) = 1/0 error
+                        cerr << "Error: Invalid expression." << endl;
+                        return 1;
+                    }
+                    else if(operand2 < 0 && operand1 - floor(operand1)){ // -n^(decimal m)
+                        operand2 *= -1;
+                        result = -1 * pow(operand2,operand1);
+                        stack.Push(result);
+                    }
+                    else{
+                        result = pow(operand2,operand1);
+                        stack.Push(result);
+                    }
                 }
             }
+            numberJustRead = false;
         }
     }
+    if(stack.Size() == 1){
+      double output;
+      stack.Pop(output);
+      cout << output << endl;
+    }
+    else{
+      cerr << "Error: Invalid expression." << endl;
+      return 1;
+    }
+
     return 0;
 }
