@@ -1,15 +1,15 @@
 /*
-    Simple program to demonstrate file I/O and 
+    Simple program to demonstrate file I/O and
     how to access command line arguments.  For example:
 
-        $ mycat myinput 
+        $ mycat myinput
 
     "myinput" is specified on the command line when the program mycat is started.
 
-    This string (called a command line argument) is available in the main() 
+    This string (called a command line argument) is available in the main()
 
     This program is similar to the Linux cat program.  It accepts a single
-    command line argument (the name of a file), then it opens the file and 
+    command line argument (the name of a file), then it opens the file and
     reads each line from the file and writes that line to standard output
 
         $ cat myfile
@@ -38,21 +38,22 @@ int main(int argc, char *argv[])
     // argc tells us how many command line arguments were given
     // "2" means that no command line arguments were given
     // (the first argument is the name of the executable)
-    if (argc < 2)
+    if (argc < 3)
     {
         // write to standar error (cerr)
-        cerr << "No filename specified." << endl;
+        cerr << "Must specify input and output file." << endl;
         return 1; // 1 is error condition
     }
-    if (argc > 2)
+    if (argc > 3)
     {
         cerr << "Too many command line arguments specified." << endl;
         return 1;
     }
 
-    // open the file specified in argv[1].  
+    // open the file specified in argv[1].
     // The "ios::in" opens the file in read mode.
     ifstream my_ifile(argv[1], ios::in);
+    ofstream my_ofile(argv[2], ios::out);
 
     // my_ifile is an ifstream object connected with the given filename
     // if the contructor failed (could not open file) then !my_file returns true
@@ -63,6 +64,12 @@ int main(int argc, char *argv[])
         return 1; // error
     }
 
+    if (!my_ofile)
+    {
+        cerr << "Could not open output file <" << argv[2] << ">." << endl;
+        return 1;
+    }
+
     // buffer to hold input line
     string buffer;
 
@@ -70,8 +77,9 @@ int main(int argc, char *argv[])
     while (getline(my_ifile, buffer, '\n'))
     {
         // write the line to standard output
-        cout << buffer << endl;
+        my_ofile << buffer << endl;
     }
+    my_ofile.close();
 
     return 0; // everything is ok
 }
