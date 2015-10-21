@@ -20,7 +20,5 @@ private:
       Node *mnext;
   };
   Node *mhead;
-  //int mpri;
 };
-
 #endif
