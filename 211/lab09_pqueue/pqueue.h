@@ -7,7 +7,7 @@ public:
   Pqueue();
   ~Pqueue();
   void enqueue(Cust *cust, int pri);
-  Cust dequeue();
+  Cust* dequeue();
   bool empty();
 private:
   class Node
@@ -20,7 +20,7 @@ private:
       Node *mnext;
   };
   Node *mhead;
-  int mpri;
+  //int mpri;
 };
 
 #endif

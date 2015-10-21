@@ -17,12 +17,12 @@ void Pqueue::enqueue(Cust *cust, int pri){
 
 }
 
-Cust Pqueue::dequeue(){
+Cust* Pqueue::dequeue(){
   Node *temp = mhead;
   Node *ret = mhead;
   mhead = mhead -> mnext;
   delete temp;
-  return *(ret -> mcust);
+  return (ret -> mcust);
 }
 
 bool Pqueue::empty(){
