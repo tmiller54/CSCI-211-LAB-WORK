@@ -1,3 +1,6 @@
+//bst.h
+//Travis Miller
+//Program 7
 #ifndef TREE_H
 #define TREE_H
 #include <vector>
@@ -7,25 +10,24 @@ class Tree{
     Tree();
     ~Tree();
 
-    std::string echo(std::string);
     bool insert(std::string);
     int size() {return numOfElements;}
     bool find(std::string);
     void print(std::vector<std::string> &);
     void breadth(std::vector<std::string >&);
-    int distance();
-    bool balanced();
+    double distance();
+    int balanced();
     void rebalance();
   private:
     class Node{
       public:
-        Node(int value){
+        Node(std::string value){
           mvalue = value;
           mleft = NULL;
           mright = NULL;
         }
         ~Node(){delete mleft; delete mright;}
-      int mvalue;
+      std::string mvalue;
       Node *mleft;
       Node *mright;
     };
@@ -34,7 +36,9 @@ class Tree{
     int numOfElements;
 
     bool insert(std::string, Node* &);
+    bool find(std::string, Node*);
     void print(std::vector<std::string> &, Node *&);
-    void breadth(std::vector<std::string> &, Node *&);
+    double distance(Node *, double, double&);
+    int balanced(Node *curNode);
 };
 #endif
