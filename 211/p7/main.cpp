@@ -81,6 +81,18 @@ int main(){
     else if(input == "rebalance"){
 
     }
+    else if(input == "print parent"){
+      vector<string> strings;
+      tree.PrintParent(strings);
+      cout << "{";
+      for(unsigned int i = 0; i < strings.size(); i++){
+        cout << strings[i];
+        if(i < strings.size()-1){
+          cout << ", ";
+        }
+      }
+      cout << "}" << endl;
+    }
 
     else{
       cerr << "Illegal command <" << input << ">.\n";

@@ -11,6 +11,7 @@ using namespace std;
 //****************************PUBLIC METHODS********************************//
 Tree::Tree(){
   mroot = NULL;
+  mroot->mparent = NULL;
   numOfElements = 0;
 }
 
@@ -29,6 +30,10 @@ bool Tree::find(string value){
 
 void Tree::print(vector<string> &values){
   print(values, mroot);
+}
+
+void Tree::PrintParent(vector<string> &values){
+  PrintParent(values, mroot);
 }
 
 void Tree::breadth(vector<string> &values){
@@ -69,18 +74,29 @@ void Tree::rebalance(){
 
 bool Tree::insert(string value, Node *&curNode){
   if(!curNode){
-    curNode = new Node(value);
+    curNode = new Node(value, NULL);
     numOfElements++;
     return true;
   }
   if(value == curNode->mvalue){
     return false;
   }
-  if(value < curNode->mvalue){
-    return insert(value, curNode->mleft);
+  if(value < curNode -> mvalue){
+    if(!curNode -> mleft){
+      curNode -> mleft = new Node(value, curNode);
+      return true;
+    }
+    else{
+      return insert(value, curNode -> mleft);
+    }
   }
   if(value > curNode->mvalue){
-    return insert(value, curNode->mright);
+    if(!curNode -> mright){
+      curNode -> mright = new Node(value, curNode);
+    }
+    else{
+      return insert(value, curNode->mright);
+    }
   }
   return false;
 }
@@ -110,6 +126,15 @@ void Tree::print(vector<string> &values, Node *&curNode){
   print(values, curNode -> mright);
 }
 
+void Tree::PrintParent(vector<string> &values, Node *&curNode){
+  if(!curNode){
+    return;
+  }
+  print(values, curNode -> mleft);
+  values.push_back(curNode -> mvalue);
+  print(values, curNode -> mright);
+}
+
 double Tree::distance(Node *curNode, double layer, double &total){
   if(!curNode){
     return layer;
@@ -121,5 +146,6 @@ double Tree::distance(Node *curNode, double layer, double &total){
 }
 
 int Tree::balanced(Node *curNode){
-  return 0;
+  return true;
+
 }
