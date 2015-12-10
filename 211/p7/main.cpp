@@ -75,11 +75,16 @@ int main(){
     }
 
     else if(input == "balanced"){
+      if(balanced()){
 
+      }
+      else{
+
+      }
     }
 
     else if(input == "rebalance"){
-
+      
     }
     else if(input == "print parent"){
       vector<string> strings;
