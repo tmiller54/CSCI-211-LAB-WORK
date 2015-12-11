@@ -11,7 +11,6 @@ int main(){
   Tree tree;
   string input;
   string argument;
-
   while(cin >> input){
     if(input == "echo"){
       cin.ignore();
@@ -75,28 +74,18 @@ int main(){
     }
 
     else if(input == "balanced"){
-      if(balanced()){
-
+      if(tree.balanced()){
+        cout << "Tree is balanced.\n";
       }
       else{
-
+        cout << "Tree is not balanced.\n";
       }
     }
 
     else if(input == "rebalance"){
-      
-    }
-    else if(input == "print parent"){
-      vector<string> strings;
-      tree.PrintParent(strings);
-      cout << "{";
-      for(unsigned int i = 0; i < strings.size(); i++){
-        cout << strings[i];
-        if(i < strings.size()-1){
-          cout << ", ";
-        }
-      }
-      cout << "}" << endl;
+      vector<string> values;
+      tree.rebalance(values);
+      //tree.insertBalanced(values, 0, values.size()-1);
     }
 
     else{
@@ -104,6 +93,5 @@ int main(){
       getline(cin,argument);                   //eating up rest of line
     }
   }
-
   return 0;
 }

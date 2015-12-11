@@ -14,25 +14,23 @@ class Tree{
     int size() {return numOfElements;}
     bool find(std::string);
     void print(std::vector<std::string> &);
-    void PrintParent(std::vector<std::string> &);
     void breadth(std::vector<std::string >&);
     double distance();
-    int balanced();
-    void rebalance();
+    bool balanced();
+    void rebalance(std::vector<std::string>&);
+    void insertBalanced(std::vector<std::string> &values, int start, int stop);
   private:
     class Node{
       public:
-        Node(std::string value, Node *parent){
+        Node(std::string value){
           mvalue = value;
           mleft = NULL;
           mright = NULL;
-          mparent = parent;
         }
         ~Node(){delete mleft; delete mright;}
       std::string mvalue;
       Node *mleft;
       Node *mright;
-      Node *mparent;
     };
     Node *mroot;
     int numOfElements;
@@ -40,8 +38,10 @@ class Tree{
     bool insert(std::string, Node* &);
     bool find(std::string, Node*);
     void print(std::vector<std::string> &, Node *&);
-    void PrintParent(std::vector<std::string> &, Node *&);
-    double distance(Node *, double, double&);
-    int balanced(Node *curNode);
+    double distance(Node*, double, double&);
+    bool balanced(Node*);
+    int height(Node*);
+    void rebalance(std::vector<std::string>&, Node*&);
+    void insertBalanced(Node*&, std::vector<std::string>&, int, int);
 };
 #endif

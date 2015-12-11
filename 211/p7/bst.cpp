@@ -11,7 +11,6 @@ using namespace std;
 //****************************PUBLIC METHODS********************************//
 Tree::Tree(){
   mroot = NULL;
-  mroot->mparent = NULL;
   numOfElements = 0;
 }
 
@@ -30,10 +29,6 @@ bool Tree::find(string value){
 
 void Tree::print(vector<string> &values){
   print(values, mroot);
-}
-
-void Tree::PrintParent(vector<string> &values){
-  PrintParent(values, mroot);
 }
 
 void Tree::breadth(vector<string> &values){
@@ -61,12 +56,16 @@ double Tree::distance(){
   return distance(mroot, 0, total);
 }
 
-int Tree::balanced(){
+bool Tree::balanced(){
   return balanced(mroot);
 }
 
-void Tree::rebalance(){
+void Tree::rebalance(vector<string> &values){
+  rebalance(values, mroot);
+}
 
+void Tree::insertBalanced(vector<string> &values, int start, int stop){
+  insertBalanced(mroot, values, start, stop);
 }
 
 //***************************************************************************//
@@ -74,7 +73,7 @@ void Tree::rebalance(){
 
 bool Tree::insert(string value, Node *&curNode){
   if(!curNode){
-    curNode = new Node(value, NULL);
+    curNode = new Node(value);
     numOfElements++;
     return true;
   }
@@ -82,21 +81,10 @@ bool Tree::insert(string value, Node *&curNode){
     return false;
   }
   if(value < curNode -> mvalue){
-    if(!curNode -> mleft){
-      curNode -> mleft = new Node(value, curNode);
-      return true;
-    }
-    else{
-      return insert(value, curNode -> mleft);
-    }
+    return insert(value, curNode -> mleft);
   }
   if(value > curNode->mvalue){
-    if(!curNode -> mright){
-      curNode -> mright = new Node(value, curNode);
-    }
-    else{
-      return insert(value, curNode->mright);
-    }
+    return insert(value, curNode->mright);
   }
   return false;
 }
@@ -126,15 +114,6 @@ void Tree::print(vector<string> &values, Node *&curNode){
   print(values, curNode -> mright);
 }
 
-void Tree::PrintParent(vector<string> &values, Node *&curNode){
-  if(!curNode){
-    return;
-  }
-  print(values, curNode -> mleft);
-  values.push_back(curNode -> mvalue);
-  print(values, curNode -> mright);
-}
-
 double Tree::distance(Node *curNode, double layer, double &total){
   if(!curNode){
     return layer;
@@ -145,7 +124,60 @@ double Tree::distance(Node *curNode, double layer, double &total){
   return total/numOfElements;
 }
 
-int Tree::balanced(Node *curNode){
-  return true;
+bool Tree::balanced(Node *curNode){
+  if(!curNode){
+    return true;
+  }
+  int rightHeight = height(curNode -> mright);
+  int leftHeight = height(curNode -> mleft);
 
+  if((abs(rightHeight-leftHeight) <= 1) && (balanced(curNode -> mleft)) && (balanced(curNode -> mright))){
+    return true;
+  }
+  return false;
+}
+
+int Tree::height(Node *curNode){
+  if(!curNode){
+    return 0;
+  }
+  if(height(curNode -> mleft) > height(curNode -> mright)){
+    return 1 + height(curNode -> mleft);
+  }
+  else{
+    return 1 + height(curNode -> mright);
+  }
+}
+
+void Tree::rebalance(vector<string> &values, Node *&curNode){
+  if(!curNode){
+    return;
+  }
+  rebalance(values, curNode -> mleft);
+  values.push_back(curNode -> mvalue);
+  rebalance(values, curNode -> mright);
+  if(curNode != mroot){                   //deletes everything before deleting mroot
+    curNode = NULL;
+  }
+  else{
+    curNode = NULL;                       // deletes mroot
+    insertBalanced(mroot, values, 0, values.size()-1);
+  }
+  numOfElements--;
+}
+
+void Tree::insertBalanced(Node *&curNode, vector<string> &values, int start, int stop){
+  if(stop < start){
+    return;
+  }
+  if(stop == start){
+    insert(values[start], curNode);
+  }
+
+  int mid = ((stop-start)/2) + start;
+
+  insert(values[mid], curNode);
+
+  insertBalanced(curNode -> mleft, values, start, mid-1);
+  insertBalanced(curNode -> mright, values, mid+1, stop);
 }
